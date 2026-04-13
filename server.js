@@ -14,10 +14,13 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const SECRET = "secret";
+// ✅ ENV VARIABLES (important for deploy)
+const PORT = process.env.PORT || 5000;
+const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/lms";
+const SECRET = process.env.JWT_SECRET || "secret";
 
 // ================= DB =================
-mongoose.connect("mongodb://127.0.0.1:27017/lms")
+mongoose.connect(MONGO_URI)
   .then(() => console.log("MongoDB Connected ✅"))
   .catch(err => console.log(err));
 
@@ -106,7 +109,7 @@ app.delete("/course/:id", auth, isAdmin, async (req, res) => {
   res.json({ message: "Course Deleted ✅" });
 });
 
-// ================= ENROLL (WITH CHECK) =================
+// ================= ENROLL =================
 app.post("/enroll", auth, async (req, res) => {
   const { courseId } = req.body;
 
@@ -127,7 +130,7 @@ app.post("/enroll", auth, async (req, res) => {
   res.json({ message: "Enrolled ✅" });
 });
 
-// ================= PROGRESS UPDATE =================
+// ================= PROGRESS =================
 app.post("/progress", auth, async (req, res) => {
   const { courseId, progress } = req.body;
 
@@ -174,6 +177,6 @@ app.get("/dashboard", auth, async (req, res) => {
 });
 
 // ================= SERVER =================
-app.listen(5000, () => {
-  console.log("🔥 Server running on 5000");
+app.listen(PORT, () => {
+  console.log(`🔥 Server running on port ${PORT}`);
 });
