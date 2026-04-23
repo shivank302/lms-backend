@@ -24,6 +24,11 @@ mongoose.connect(MONGO_URI)
   .then(() => console.log("MongoDB Connected ✅"))
   .catch(err => console.log(err));
 
+// ================= ROOT ROUTE (NEW ADDED) =================
+app.get("/", (req, res) => {
+  res.send("API is running 🚀");
+});
+
 // ================= AUTH =================
 const auth = (req, res, next) => {
   const header = req.headers.authorization;
