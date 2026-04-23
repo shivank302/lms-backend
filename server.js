@@ -172,15 +172,17 @@ app.get("/dashboard", auth, async (req, res) => {
       courseId: e.courseId
     });
 
-    result.push({
-      course,
-      progress: prog ? prog.progress : 0
-    });
+    // ✅ IMPORTANT FIX
+    if (course) {
+      result.push({
+        course,
+        progress: prog ? prog.progress : 0
+      });
+    }
   }
 
   res.json(result);
 });
-
 // ================= SERVER =================
 app.listen(PORT, () => {
   console.log(`🔥 Server running on port ${PORT}`);
